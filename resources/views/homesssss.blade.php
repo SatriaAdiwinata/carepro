@@ -8,7 +8,7 @@
         <div class="w-1/2 mt-20 ml-16">
             <h2 class="text-6xl font-bold mb-6">Temukan Karir Impian Anda</h2>
             <p class="text-2xl mb-8 leading-relaxed">
-                CarePropro menghubungkan talenta terbaik<br>
+                CarePro menghubungkan talenta terbaik<br>
                 dengan perusahaan terpercaya. 
                 membantu Anda menemukan peluang kerja yang sesuai keahlian. <br>
                 Mulai perjalanan karir Anda hari ini!
