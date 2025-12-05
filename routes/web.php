@@ -11,11 +11,14 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\LamaranController;
+use App\Http\Controllers\ApplicantController; // <<< TAMBAHKAN INI
 
 use App\http\Controllers\HRDashboardController; 
 use App\Http\Controllers\Perusahaan\LowonganController; 
 use App\Http\Controllers\Perusahaan\LamaranMasukController; // <<< IMPOR BARU
 use App\Http\Controllers\Perusahaan\DataKaryawanController; // <<< IMPOR INI
+use App\Http\Controllers\Perusahaan\DashboardPerusahaanController; // <<< IMPOR BARU INI
+
 
 // Impor Controller Admin
 use App\Http\Controllers\Admin\LoginController;
@@ -107,10 +110,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard-pengguna', [PublicController::class, 'penggunaDashboard'])->name('pengguna.dashboard');
     
     // RUTE BARU: Halaman Lamaran Saya
-    Route::get('/lamaran-saya', function () {
-        // NOTE: Anda harus mengganti ini dengan pemanggilan Controller yang sesungguhnya (misal: [ApplicantController::class, 'index'])
-        return view('pengguna.lamaran_saya'); 
-    })->name('lamaran.index');
+    Route::get('/lamaran-saya', [ApplicantController::class, 'index']) // <<< UBAH KE CONTROLLER
+    ->name('lamaran.index');
     
     
     // Dashboard Perusahaan
@@ -127,11 +128,10 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'peran:perusahaan'])->group(function () {
     
     // Rute Dashboard HR (Ini rute duplikat, bisa dihapus, tapi jika dipertahankan biarkan saja)
-    Route::get('/perusahaan/dashboard', [HRDashboardController::class, 'dashboard'])->name('perusahaan.dashboard');
 
     // GRUP ROUTE UNTUK SUB-HALAMAN HR DASHBOARD
     Route::prefix('perusahaan')->name('perusahaan.')->group(function () {
-        
+        Route::get('/dashboard', [DashboardPerusahaanController::class, 'index'])->name('dashboard');
         // --- Halaman Profil ---
         Route::get('/profil-hr', [HRDashboardController::class, 'profil'])->name('profil'); 
         Route::put('/profil-hr', [HRDashboardController::class, 'updateProfil'])->name('profil.update');
@@ -148,6 +148,8 @@ Route::middleware(['auth'])->group(function () {
             });
                     Route::get('/data-karyawan', [DataKaryawanController::class, 'index'])->name('data-karyawan');
 Route::delete('/data-karyawan/{id}', [DataKaryawanController::class, 'destroy'])->name('data-karyawan.destroy');
+Route::get('/data-karyawan/{id}/detail', [DataKaryawanController::class, 'getDetail'])->name('data-karyawan.detail');
+
         // --- Halaman Pengaturan ---
         Route::get('/pengaturan', [HRDashboardController::class, 'pengaturan'])->name('pengaturan');
         Route::put('/pengaturan', function () { /* Logic update pengaturan */ })->name('pengaturan.update');
@@ -212,6 +214,11 @@ Route::prefix('backoffice')->group(function () {
             // Rute update profil admin
             Route::put('/profile/update', 'updateProfile')->name('admin.profile.update');
         });
+
+        // Route untuk menampilkan halaman detail perusahaan (frontend only dengan data dummy)
+        Route::get('/companies/{id}', function ($id) {
+            return view('admin.companies.show');
+        })->name('companies.show');
         
         // 6. Log Out Admin
         Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');

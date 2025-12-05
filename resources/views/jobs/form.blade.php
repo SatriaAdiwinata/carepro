@@ -31,10 +31,6 @@
         
         <div class="header-section">
             <div class="header-image">
-                
-
-[Image of person writing job application form]
-
                 <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400" alt="Person writing">
             </div>
             <div class="header-text">

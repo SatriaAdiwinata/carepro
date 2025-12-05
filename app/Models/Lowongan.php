@@ -29,4 +29,11 @@ class Lowongan extends Model
     {
         return $this->belongsTo(Perusahaan::class, 'perusahaan_id');
     }
+    
+    // ✅ RELASI PENTING UNTUK DASHBOARD DAN LAMARAN MASUK
+    public function lamarans()
+    {
+        // Menghubungkan satu Lowongan ke banyak Lamaran
+        return $this->hasMany(Lamaran::class, 'lowongan_id');
+    }
 }

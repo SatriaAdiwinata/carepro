@@ -26,7 +26,7 @@
                 </button>
             </div>
 
-            {{-- Form Filter (Logika Server-Side) --}}
+            {{-- Form Filter (Server-Side) --}}
             <form action="{{ route('perusahaan.data-karyawan') }}" method="GET" style="padding: 20px 20px 0 20px;">
                 <div style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
                     
@@ -90,8 +90,8 @@
             align-items: center;
             text-align: center;
         ">
-                    <div style="font-size: 28px; font-weight: bold;">?</div> 
-                    <div style="opacity: 0.9;">Baru Bulan Ini</div>
+                    <div style="font-size: 28px; font-weight: bold;">{{ number_format($karyawanBulanIni) }}</div> 
+                    <div style="opacity: 0.9;">Diterima Bulan Ini</div>
                 </div>
 
             </div>
@@ -114,19 +114,23 @@
                     <tbody>
                         @forelse($karyawans as $karyawan)
                             <tr data-posisi="{{ $karyawan->posisi }}" data-nama="{{ $karyawan->nama_karyawan }}">
-                                {{-- Kolom ID dihapus --}}
                                 <td><strong>{{ $karyawan->nama_karyawan }}</strong></td>
                                 <td>{{ $karyawan->posisi }}</td>
                                 <td>{{ \Carbon\Carbon::parse($karyawan->tanggal_bergabung ?? now())->format('d M Y') }}</td>
                                 <td>{{ $karyawan->email }}</td>
                                 <td>{{ $karyawan->no_telepon }}</td>
-                                {{-- Kolom Status dihapus --}}
                                 <td>
                                     <div class="action-buttons">
-                                        {{-- viewEmployee dipanggil dengan ID --}}
+                                        {{-- viewEmployee dipanggil dengan ID untuk AJAX --}}
                                         <button class="btn btn-primary btn-sm" onclick="viewEmployee('{{ $karyawan->nama_karyawan }}', {{ $karyawan->id }})"><i
                                                 class="fas fa-eye"></i>
                                         </button>
+
+                                        @if ($karyawan->lamaran && $karyawan->lamaran->file_cv)
+                                            <a href="{{ Storage::url($karyawan->lamaran->file_cv) }}" class="btn btn-sm btn-info" target="_blank" title="Download CV">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        @endif
                                         
                                         {{-- Form delete Laravel --}}
                                         <form action="{{ route('perusahaan.data-karyawan.destroy', $karyawan->id) }}" method="POST" style="display:inline;">
@@ -157,7 +161,7 @@
         </div>
     </div>
 
-    {{-- Halaman Detail --}}
+    {{-- Halaman Detail (Akan diisi oleh JS/AJAX) --}}
     <div id="employee-detail-page" class="card" style="display: none;">
         <div class="card-header">
             <h3 class="card-title">Detail Karyawan</h3>
@@ -174,14 +178,9 @@
 
 @section('scripts')
     <script>
-        // Data statis dan fungsi filterKaryawan() telah dihapus.
-        
-        // --- FUNGSI VIEW EMPLOYEE (PLACEHOLDER, perlu AJAX) ---
         
         /**
-         * Fungsi untuk menampilkan halaman detail karyawan.
-         * CATATAN: Ini hanya placeholder. Anda harus menggunakan AJAX untuk 
-         * mengambil data detail karyawan secara dinamis dari Controller.
+         * Fungsi untuk menampilkan halaman detail karyawan menggunakan AJAX.
          */
         function viewEmployee(nama, id) {
              const listPage = document.getElementById('karyawan');
@@ -189,30 +188,106 @@
              const detailContent = document.getElementById('employeeDetailPageContent');
 
              if (!listPage || !detailPage || !detailContent) return;
-             
-             // --- TAMPILAN PLACEHOLDER JIKA DATA DETAIL TIDAK ADA ---
-             const initials = nama.split(' ').map(n => n[0]).join('');
 
-             detailContent.innerHTML = `
-                 <div style="text-align: center; margin-bottom: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px;">
-                     <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; font-weight: 700;">
-                         ${initials}
-                     </div>
-                     <h2 style="margin: 0; color: #1f2937;">${nama}</h2>
-                     {{-- Status 'Aktif' dihilangkan dari tampilan detail ini --}}
-                 </div>
-                 <div class="alert alert-warning" style="text-align: center;">
-                    <i class="fas fa-exclamation-triangle"></i> Data Detail Karyawan tidak dapat ditampilkan!
-                    Harap implementasikan fungsi **AJAX/fetch** di sini untuk mengambil data lengkap Karyawan ID: **#${id}**
-                    dari Controller backend.
-                 </div>
-             `;
-
-             // Sembunyikan daftar karyawan dan tampilkan halaman detail
+             // 1. Tampilkan loading state dan ubah tampilan
+             detailContent.innerHTML = '<div style="text-align: center; padding: 50px;"><i class="fas fa-spinner fa-spin fa-2x"></i> Memuat data...</div>';
              listPage.style.display = 'none';
              detailPage.style.display = 'block';
-
              window.scrollTo({ top: 0, behavior: 'smooth' });
+
+             // 2. Lakukan panggilan AJAX ke Controller (Route: perusahaan.data-karyawan.detail)
+             const url = `{{ url('perusahaan/data-karyawan') }}/${id}/detail`;
+             
+             fetch(url, {
+                 method: 'GET',
+                 headers: {
+                     'X-Requested-With': 'XMLHttpRequest',
+                     'Content-Type': 'application/json'
+                 }
+             })
+             .then(response => {
+                 if (!response.ok) {
+                     return response.json().then(err => {
+                         throw new Error(err.error || 'Gagal mengambil data detail.');
+                     });
+                 }
+                 return response.json();
+             })
+             .then(data => {
+                 if (data.success && data.karyawan) {
+                     const k = data.karyawan;
+                     
+                     
+                     // Helper untuk memformat tanggal
+                     const formatDate = (dateString) => {
+                         if (!dateString) return 'N/A';
+                         return new Date(dateString).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+                     };
+
+                     const tglGabung = formatDate(k.tanggal_bergabung);
+                     const tglLahir = formatDate(k.tanggal_lahir);
+                     const initials = k.nama_karyawan.split(' ').map(n => n[0]).join('');
+
+                     // 3. Isi Konten Detail HTML
+                     detailContent.innerHTML = `
+                         <div style="text-align: center; margin-bottom: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px;">
+                             <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; font-weight: 700;">
+                                 ${initials}
+                             </div>
+                             <h2 style="margin: 0; color: #1f2937;">${k.nama_karyawan}</h2>
+                             <p style="margin: 5px 0 0; color: #64748b;">${k.posisi}</p>
+                         </div>
+
+                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                             <div class="detail-box">
+                                 <h4 style="margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Informasi Kontak & Pekerjaan</h4>
+                                 <p><strong class="detail-label">Email:</strong> <span class="detail-value">${k.email}</span></p>
+                                 <p><strong class="detail-label">No. Telepon:</strong> <span class="detail-value">${k.no_telepon}</span></p>
+                                 <p><strong class="detail-label">Tanggal Bergabung:</strong> <span class="detail-value">${tglGabung}</span></p>
+                                 <p><strong class="detail-label">Alamat:</strong> <span class="detail-value">${k.alamat || 'N/A'}</span></p>
+                             </div>
+                             <div class="detail-box">
+                                 <h4 style="margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Data Pribadi & Pendidikan</h4>
+                                 <p><strong class="detail-label">Tanggal Lahir:</strong> <span class="detail-value">${tglLahir}</span></p>
+                                 <p><strong class="detail-label">Jenis Kelamin:</strong> <span class="detail-value">${k.jenis_kelamin || 'N/A'}</span></p>
+                                 <p><strong class="detail-label">Pendidikan Terakhir:</strong> <span class="detail-value">${k.pendidikan_terakhir || 'N/A'}</span></p>
+                                 <p><strong class="detail-label">Jurusan/Program Studi:</strong> <span class="detail-value">${k.jurusan || 'N/A'}</span></p>
+                                 <p><strong class="detail-label">Universitas/Institusi:</strong> <span class="detail-value">${k.universitas || 'N/A'}</span></p>
+                                 <p><strong class="detail-label">Tahun Lulus:</strong> <span class="detail-value">${k.tahun_lulus || 'N/A'}</span></p>
+                                 <p><strong class="detail-label">IPK:</strong> <span class="detail-value">${k.ipk || 'N/A'}</span></p>
+                             </div>
+                         </div>
+                         <style>
+                             .detail-box {
+                                padding: 15px;
+                                background: #f8fafc;
+                                border-radius: 8px;
+                                border: 1px solid #e2e8f0;
+                                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                            }
+                            .detail-label {
+                                color: #64748b;
+                                font-size: 14px;
+                                display: block;
+                                margin-bottom: 2px;
+                            }
+                            .detail-value {
+                                font-weight: 600;
+                                color: #1f2937;
+                                display: block;
+                                margin-bottom: 10px;
+                            }
+                         </style>
+                     `;
+
+                 } else {
+                     detailContent.innerHTML = '<div class="alert alert-danger" style="text-align: center;"><i class="fas fa-exclamation-triangle"></i> Data karyawan tidak valid.</div>';
+                 }
+             })
+             .catch(error => {
+                 console.error('Error fetching employee data:', error);
+                 detailContent.innerHTML = `<div class="alert alert-danger" style="text-align: center;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data karyawan: ${error.message}.</div>`;
+             });
         }
         
         /**
@@ -230,7 +305,6 @@
              window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // --- PENDAFTARAN KE GLOBAL SCOPE ---
         document.addEventListener('DOMContentLoaded', function() {
             window.viewEmployee = viewEmployee;
             window.cancelEmployeeDetailPage = cancelEmployeeDetailPage;

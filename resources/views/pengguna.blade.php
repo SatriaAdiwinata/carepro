@@ -1,56 +1,68 @@
 @extends('layouts.app')
-tion('title', 'Platform Pencarian Kerja Terpercaya')
+@section('title', 'Platform Pencarian Kerja Terpercaya')
 
 @section('content')
 
-<!-- Home/Welcome Section -->
-<section id="beranda" class="gradient-bg text-white py-5">
-    <div class="container mx-auto px-6 flex flex-row items-center justify-between gap-10">
-        <div class="w-1/2 mt-20 ml-16">
+<section id="beranda" class="gradient-bg text-white py-14">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+
+        <!-- Text -->
+        <div class="w-full mt-12 -ml-0 md:ml-16 md:w-1/2 text-center md:text-left">
             
             {{-- Ambil nama pengguna yang login --}}
             @php
                 $namaPengguna = Auth::user()->nama ?? 'Pengguna';
             @endphp
-            
+
             {{-- HANYA menampilkan ucapan selamat datang untuk peran 'pelamar' --}}
             @if(strtolower(Auth::user()->peran) === 'pelamar')
-                <h2 class="text-6xl font-bold mb-6">Selamat Datang, {{ $namaPengguna }} 👋</h2>
-                <p class="text-2xl mb-8 leading-relaxed">
-                    <br>Lanjutkan perjalanan karirmu bersama CarePro. Temukan rekomendasi pekerjaan yang sesuai untukmu.<br>
+                <h2 class="text-4xl md:text-6xl font-bold mb-6">
+                    Selamat Datang, {{ $namaPengguna }} 👋
+                </h2>
+
+                <p class="text-lg md:text-2xl mb-8 leading-relaxed">
+                    Lanjutkan perjalanan karirmu bersama CarePro.<br>
+                    Temukan rekomendasi pekerjaan yang sesuai untukmu.
                 </p>
             @endif
-            
+
         </div>
-        <div class="w-1/1 mt-10 flex justify-center ml-20">
-            <img src="images/pengguna.png" 
-                 alt="Karir Impian" 
-                 class="w- max-w-md ">
+
+        <!-- Image -->
+        <div class="w-full md:w-1/2 flex justify-center -mt-16 md:mt-0">
+            <img src="images/pengguna.png"
+                 alt="Karir Impian"
+                 class="w-full max-w-xs md:max-w-md">
         </div>
+
     </div>
 </section>
 
-
 <!-- Konten yang Sama untuk Kedua Peran -->
-<section class="py-16 bg-white">
+<section class="py-10 bg-white">
     <div class="container mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
+            
             <div>
-                <div class="text-4xl font-bold text-purple-600 mb-2">10,000+</div>
-                <div class="text-gray-600">Lowongan Aktif</div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">10,000+</div>
+                <div class="text-gray-600 text-sm md:text-base">Lowongan Aktif</div>
             </div>
+
             <div>
-                <div class="text-4xl font-bold text-purple-600 mb-2">5,000+</div>
-                <div class="text-gray-600">Perusahaan Terdaftar</div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">5,000+</div>
+                <div class="text-gray-600 text-sm md:text-base">Perusahaan Terdaftar</div>
             </div>
+
             <div>
-                <div class="text-4xl font-bold text-purple-600 mb-2">50,000+</div>
-                <div class="text-gray-600">Pencari Kerja</div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">50,000+</div>
+                <div class="text-gray-600 text-sm md:text-base">Pencari Kerja</div>
             </div>
+
             <div>
-                <div class="text-4xl font-bold text-purple-600 mb-2">95%</div>
-                <div class="text-gray-600">Tingkat Kepuasan</div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">95%</div>
+                <div class="text-gray-600 text-sm md:text-base">Tingkat Kepuasan</div>
             </div>
+
         </div>
     </div>
 </section>

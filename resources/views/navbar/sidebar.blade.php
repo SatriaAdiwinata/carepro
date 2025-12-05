@@ -20,6 +20,7 @@
 
         {{-- Dashboard --}}
         <a href="{{ route('perusahaan.dashboard') }}"
+            {{-- Menggunakan Route::is() untuk pengecekan eksak route dashboard --}}
             class="nav-item {{ Route::is('perusahaan.dashboard') ? 'active' : '' }}">
             <i class="fas fa-home"></i>
             <span>Dashboard</span>

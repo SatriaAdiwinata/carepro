@@ -6,10 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage; 
 use App\Models\Perusahaan; 
-// Hapus 'use App\Models\Lowongan;' karena Lowongan sudah dipindahkan
-// use App\Models\Lowongan; 
-// Jika Anda sudah siap dengan fitur lamaran, uncomment baris ini
-// use App\Models\Lamaran; 
+
 
 class HRDashboardController extends Controller
 {

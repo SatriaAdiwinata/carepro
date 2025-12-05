@@ -3,48 +3,60 @@
 @section('title', 'Platform Pencarian Kerja Terpercaya')
 
 @section('content')
-    <section id="beranda" class="gradient-bg text-white py-5">
-    <div class="container mx-auto px-6 flex flex-row items-center justify-between gap-10">
-        <div class="w-1/2 mt-20 ml-16">
-            <h2 class="text-6xl font-bold mb-6">Temukan Karir Impian Anda</h2>
-            <p class="text-2xl mb-8 leading-relaxed">
-                CarePropro menghubungkan talenta terbaik<br>
-                dengan perusahaan terpercaya. 
-                membantu Anda menemukan peluang kerja yang sesuai keahlian. <br>
+    <section id="beranda" class="gradient-bg text-white py-10">
+    <div class="container mt-6 mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+
+        <!-- Text -->
+        <div class="w-full ml-0 md:ml-16 md:w-1/2 text-center md:text-left">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6 mt-12 md:mt-0 
+                max-w-xs sm:max-w-sm md:max-w-none mx-auto md:mx-0 leading-tight">
+                Temukan Karir Impian Anda
+            </h2>
+            <p class="text-lg md:text-1xl mb-8 leading-relaxed">
+                CarePropro menghubungkan talenta terbaik
+                dengan perusahaan terpercaya. membantu Anda menemukan peluang kerja yang sesuai keahlian.
                 Mulai perjalanan karir Anda hari ini!
-            </p>    
+            </p>
         </div>
-        <div class="w-1/1 mt-10 flex justify-center ml-20">
-            <img src="images/KarirCP.png" 
-                 alt="Karir Impian" 
-                 class="w- max-w-md ">
+
+        <!-- Image -->
+        <div class="w-full md:w-1/2 flex justify-center -mt-16 md:mt-0">
+            <img src="images/KarirCP.png"
+                 alt="Karir Impian"
+                 class="w-full max-w-xs sm:max-w-sm md:max-w-md">
         </div>
+
     </div>
 </section>
 
 
     <section class="py-10 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-                <div>
-                    <div class="text-4xl font-bold text-purple-600 mb-2">10,000+</div>
-                    <div class="text-gray-600">Lowongan Aktif</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-bold text-purple-600 mb-2">5,000+</div>
-                    <div class="text-gray-600">Perusahaan Terdaftar</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-bold text-purple-600 mb-2">50,000+</div>
-                    <div class="text-gray-600">Pencari Kerja</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-bold text-purple-600 mb-2">95%</div>
-                    <div class="text-gray-600">Tingkat Kepuasan</div>
-                </div>
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
+            
+            <div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">10,000+</div>
+                <div class="text-gray-600 text-sm md:text-base">Lowongan Aktif</div>
             </div>
+
+            <div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">5,000+</div>
+                <div class="text-gray-600 text-sm md:text-base">Perusahaan Terdaftar</div>
+            </div>
+
+            <div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">50,000+</div>
+                <div class="text-gray-600 text-sm md:text-base">Pencari Kerja</div>
+            </div>
+
+            <div>
+                <div class="text-4xl font-bold text-purple-600 mb-1">95%</div>
+                <div class="text-gray-600 text-sm md:text-base">Tingkat Kepuasan</div>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
@@ -81,40 +93,51 @@
     </section>
 
     <section id="tentang" class="py-16 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <img src="images/TentangCP.png" alt="Tentang Kami" class="w-full max-w-md h-65 mx-auto rounded-lg mt-10">
-                </div>
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-                <div>
-                    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center ml-40 md:text-left">Tentang Kami</h3>
-                    <p class="text-lg text-gray-600 mb-8 text-center md:text-left">CarePro adalah platform pencarian kerja terdepan di Indonesia yang menghubungkan talenta terbaik dengan perusahaan-perusahaan terpercaya. Kami berkomitmen untuk membantu setiap individu menemukan karir yang sesuai dengan passion dan kemampuan mereka.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <h4 class="text-xl font-semibold mb-4 text-purple-600">Untuk Pencari Kerja</h4>
-                            <ul class="space-y-2 text-gray-600">
-                                <li>✓ Akses ke ribuan lowongan kerja</li>
-                                <li>✓ Profile builder yang mudah</li>
-                                <li>✓ Notifikasi lowongan sesuai kriteria</li>
-                                <li>✓ Tips karir dan interview</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold mb-4 text-purple-600">Untuk Perusahaan</h4>
-                            <ul class="space-y-2 text-gray-600">
-                                <li>✓ Posting lowongan dengan mudah</li>
-                                <li>✓ Database kandidat berkualitas</li>
-                                <li>✓ Tools screening yang efektif</li>
-                                <li>✓ Analytics dan reporting</li>
-                            </ul>
-                        </div>
+            <!-- Image -->
+            <div class="flex justify-center">
+                <img src="images/TentangCP.png" alt="Tentang Kami" 
+                     class="w-full max-w-md rounded-lg">
+            </div>
+
+            <!-- Text Content -->
+            <div>
+                <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">
+                    Tentang Kami
+                </h3>
+
+                <p class="text-lg text-gray-600 mb-8 text-center md:text-left">
+                    CarePro adalah platform pencarian kerja terdepan di Indonesia yang menghubungkan talenta terbaik dengan perusahaan-perusahaan terpercaya. Kami berkomitmen untuk membantu setiap individu menemukan karir yang sesuai dengan passion dan kemampuan mereka.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-purple-600">Untuk Pencari Kerja</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>✓ Akses ke ribuan lowongan kerja</li>
+                            <li>✓ Profile builder yang mudah</li>
+                            <li>✓ Notifikasi lowongan sesuai kriteria</li>
+                            <li>✓ Tips karir dan interview</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-purple-600">Untuk Perusahaan</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>✓ Posting lowongan dengan mudah</li>
+                            <li>✓ Database kandidat berkualitas</li>
+                            <li>✓ Tools screening yang efektif</li>
+                            <li>✓ Analytics dan reporting</li>
+                        </ul>
                     </div>
                 </div>
+
             </div>
         </div>
-    </section>
-
+    </div>
+</section>
     <!-- Job Listings -->
 <section class="py-12 bg-gray-100">
         <div class="container mx-auto px-6">

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Perusahaan;
 use App\Models\Karyawan; 
+use Carbon\Carbon; // <<< WAJIB ADA UNTUK PERHITUNGAN TANGGAL
+use Illuminate\Support\Facades\Storage; // <<< TAMBAH BARIS INI
 
 class DataKaryawanController extends Controller
 {
@@ -16,7 +18,7 @@ class DataKaryawanController extends Controller
      */
     public function index(Request $request)
     {
-        // 1. Dapatkan data Perusahaan dari pengguna yang sedang login
+        // 1. Dapatkan data Perusahaan
         $perusahaan = Perusahaan::where('pengguna_id', Auth::id())->first();
 
         if (!$perusahaan) {
@@ -26,8 +28,9 @@ class DataKaryawanController extends Controller
         $namaPerusahaan = $perusahaan->nama; 
         $perusahaanId = $perusahaan->id;
 
-        // 2. Query Data Karyawan
+        // 2. Query Data Karyawan dengan Filter
         $query = Karyawan::where('perusahaan_id', $perusahaanId)
+                        ->with('lamaran') // <<< KODE BARU: Memuat data Lamaran (untuk akses CV)
                          ->orderBy('tanggal_bergabung', 'desc');
 
         // Filter Posisi
@@ -45,23 +48,30 @@ class DataKaryawanController extends Controller
         }
 
         // 3. Ambil data dengan pagination
-        $karyawans = $query->paginate(10); 
+        $karyawans = $query->paginate(10);
+        
+        // 4. Hitung karyawan yang bergabung bulan ini ("Diterima Bulan Ini")
+        $karyawanBulanIni = Karyawan::where('perusahaan_id', $perusahaanId)
+                                    ->whereYear('tanggal_bergabung', Carbon::now()->year)
+                                    ->whereMonth('tanggal_bergabung', Carbon::now()->month)
+                                    ->count();
 
-        // 4. Kirim data ke View
-        return view('perusahaan.data-karyawan', compact('karyawans', 'namaPerusahaan'));
+
+        // 5. Kirim data ke view
+        return view('perusahaan.data-karyawan', compact('karyawans', 'karyawanBulanIni', 'namaPerusahaan'));
     }
-
-
+    
+    /**
+     * Hapus data karyawan (DELETE).
+     * Route: perusahaan.data-karyawan.destroy
+     */
     public function destroy($id)
     {
-        // 1. Dapatkan data Perusahaan dari pengguna yang sedang login
         $perusahaan = Perusahaan::where('pengguna_id', Auth::id())->first();
-
         if (!$perusahaan) {
             return redirect()->route('perusahaan.dashboard')->with('error', 'Data profil perusahaan tidak ditemukan.');
         }
 
-        // 2. Cari karyawan berdasarkan ID dan pastikan ia milik perusahaan yang sedang login
         $karyawan = Karyawan::where('perusahaan_id', $perusahaan->id)
                             ->where('id', $id)
                             ->first();
@@ -71,18 +81,50 @@ class DataKaryawanController extends Controller
         }
 
         $namaKaryawan = $karyawan->nama_karyawan;
-
         try {
-            // 3. Lakukan penghapusan
             $karyawan->delete();
-
-            // 4. Redirect dengan pesan sukses
             return redirect()->route('perusahaan.data-karyawan')
                              ->with('success', 'Data karyawan **' . $namaKaryawan . '** berhasil dihapus.');
 
         } catch (\Exception $e) {
-            // Tangani error jika terjadi masalah saat menghapus
             return redirect()->back()->with('error', 'Gagal menghapus data karyawan: ' . $e->getMessage());
         }
+    }
+    
+    /**
+     * Mengambil detail karyawan berdasarkan ID (untuk AJAX).
+     * Route: perusahaan.data-karyawan.detail
+     */
+    public function getDetail($id)
+    {
+        $perusahaan = Perusahaan::where('pengguna_id', Auth::id())->first();
+
+        if (!$perusahaan) {
+            return response()->json(['error' => 'Akses ditolak.'], 403);
+        }
+
+        $karyawan = Karyawan::where('perusahaan_id', $perusahaan->id)
+                            ->where('id', $id)
+                            ->first();
+
+        if (!$karyawan) {
+            return response()->json(['error' => 'Data karyawan tidak ditemukan.'], 404);
+        }
+
+        // --- KODE BARU: Menghasilkan URL CV ---
+        $cvUrl = null;
+        if ($karyawan->lamaran && $karyawan->lamaran->file_cv) {
+            // Gunakan Storage::url untuk mendapatkan URL lengkap
+            $cvUrl = Storage::url($karyawan->lamaran->file_cv);
+        }
+        
+        // Tambahkan URL CV ke objek karyawan yang akan di-JSON-kan
+        $karyawan->cv_url = $cvUrl;
+
+        // Kembalikan seluruh objek karyawan dalam format JSON
+        return response()->json([
+            'success' => true,
+            'karyawan' => $karyawan 
+        ]);
     }
 }

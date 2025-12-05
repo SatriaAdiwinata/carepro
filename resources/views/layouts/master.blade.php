@@ -582,10 +582,9 @@
 
         <div class="main-content">
             <div class="header">
-                <h1 id="page-title">@yield('page-title', 'Dashboard')</h1>
+                <h1 id="page-title">@yield('page-title', 'dashboard')</h1>
                 <div class="user-info">
                     <div>
-                        <div style="font-weight: 600;">{{ $namaPerusahaan }}</div>
                         <div style="font-size: 13px; color: #64748b;">HR Manager</div>
                     </div>
                     {{-- Asumsi $namaPerusahaan sudah dikirim dari Controller --}}

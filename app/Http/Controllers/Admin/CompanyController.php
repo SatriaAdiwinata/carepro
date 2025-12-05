@@ -16,9 +16,16 @@ class CompanyController extends Controller
         return view('admin.companies.index');
     }
 
-    // ... (Metode create, store, edit, update, destroy memiliki struktur yang sama dengan UserController, 
-    // hanya mengganti 'users' menjadi 'companies' dan menyesuaikan logika bisnis) ...
-    
+    /**
+     * Menampilkan detail perusahaan.
+     * Route: GET /backoffice/companies/{id} (admin.companies.show)
+     */
+    public function show($id)
+    {
+        // Sementara return view dengan data dummy
+        return view('admin.companies.show');
+    }
+
     public function create()
     {
         return view('admin.companies.create');

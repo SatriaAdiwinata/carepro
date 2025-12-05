@@ -181,61 +181,61 @@
         </div>
     </div>
 
-    <!--Footer-->
     <footer class="bg-gray-800 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="{{ asset('images/logologin.png') }}" alt="CarePro Logo"
-                            class="h-10 w-10 object-contain">
-                        <h4 class="text-xl font-bold">CarePro</h4>
-                    </div>
-
-                    <p class="text-gray-400">Platform pencarian kerja terpercaya untuk menghubungkan talenta dengan
-                        peluang terbaik.</p>
-                </div>
-                <div>
-                    <h5 class="font-semibold mb-4">Untuk Pencari Kerja</h5>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white">Cari Lowongan</a></li>
-                        <li><a href="#" class="hover:text-white">Buat CV</a></li>
-                        <li><a href="#" class="hover:text-white">Tips Karir</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="font-semibold mb-4">Untuk Perusahaan</h5>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white">Post Lowongan</a></li>
-                        <li><a href="#" class="hover:text-white">Cari Kandidat</a></li>
-                        <li><a href="#" class="hover:text-white">Paket Premium</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="font-semibold mb-4">Ikuti Kami</h5>
-                    <div class="flex space-x-4">
-                        <a href="#"
-                            class="bg-gray-600 hover:bg-gray-500 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
-                            <i class="fab fa-facebook-f text-lg"></i>
-                        </a>
-                        <a href="#"
-                            class="bg-gray-600 hover:bg-gray-500 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
-                            <i class="fab fa-tiktok text-lg"></i>
-                        </a>
-                        <a href="#"
-                            class="bg-gray-600 hover:bg-gray-500 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
-                            <i class="fab fa-instagram text-lg"></i>
-                        </a>
-                    </div>
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <img src="{{ asset('images/logologin.png') }}" alt="CarePro Logo"
+                        class="h-10 w-10 object-contain">
+                    <h4 class="text-xl font-bold">CarePro</h4>
                 </div>
 
-
+                <p class="text-gray-400">Platform pencarian kerja terpercaya untuk menghubungkan talenta dengan
+                    peluang terbaik.</p>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2025 CarePro. All rights reserved.</p>
+
+            <div>
+                <h5 class="font-semibold mb-4 md:ml-10">Untuk Pencari Kerja</h5>
+                <ul class="space-y-2 text-gray-400 md:ml-10">
+                    <li><a href="#" class="hover:text-white">Cari Lowongan</a></li>
+                    <li><a href="#" class="hover:text-white">Buat CV</a></li>
+                    <li><a href="#" class="hover:text-white">Tips Karir</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-semibold mb-4 md:ml-8">Untuk Perusahaan</h5>
+                <ul class="space-y-2 text-gray-400 md:ml-8">
+                    <li><a href="#" class="hover:text-white">Post Lowongan</a></li>
+                    <li><a href="#" class="hover:text-white">Cari Kandidat</a></li>
+                    <li><a href="#" class="hover:text-white">Paket Premium</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-semibold mb-4">Ikuti Kami</h5>
+                <div class="flex space-x-4">
+                    <a href="#"
+                        class="bg-gray-600 hover:bg-gray-500 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
+                        <i class="fab fa-facebook-f text-lg"></i>
+                    </a>
+                    <a href="#"
+                        class="bg-gray-600 hover:bg-gray-500 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
+                        <i class="fab fa-tiktok text-lg"></i>
+                    </a>
+                    <a href="#"
+                        class="bg-gray-600 hover:bg-gray-500 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
+                        <i class="fab fa-instagram text-lg"></i>
+                    </a>
+                </div>
             </div>
         </div>
-    </footer>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2025 CarePro. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 
     <script>
         function toggleDropdown(dropdownId, arrowId) {
